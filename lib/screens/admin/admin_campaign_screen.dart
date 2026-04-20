@@ -289,7 +289,7 @@ class _AdminCampaignScreenState extends State<AdminCampaignScreen> {
               return ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemCount: campaigns.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                separatorBuilder: (_, _) => const SizedBox(height: 10),
                 itemBuilder: (context, index) {
                   final campaign = campaigns[index];
                   final raised = formatRupiah(campaign.collected);
@@ -395,7 +395,61 @@ class _AdminCampaignScreenState extends State<AdminCampaignScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin Kelola Campaign')),
+      appBar: AppBar(
+        toolbarHeight: 76,
+        titleSpacing: 16,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFFFFF5EC), Color(0xFFFEE8D8)],
+            ),
+          ),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFD84A24).withOpacity(0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.campaign_outlined,
+                color: Color(0xFFB43D1E),
+              ),
+            ),
+            const SizedBox(width: 10),
+            const Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Kelola Campaign',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF2E1C15),
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    'Tambah, edit, dan optimalkan campaign',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Color(0xFF7A5A4B),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
       body: body,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _isProcessing ? null : _handleCreateCampaign,

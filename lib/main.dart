@@ -34,95 +34,70 @@ class DonasiApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF7F2EC),
-        fontFamily: 'Georgia',
-        appBarTheme: AppBarTheme(
+        scaffoldBackgroundColor: const Color(0xFFF8F2EA),
+        appBarTheme: const AppBarTheme(
           centerTitle: true,
-          backgroundColor: const Color(0xFFF7F2EC),
-          foregroundColor: const Color(0xFF2D1B16),
-          titleTextStyle: const TextStyle(
-            color: Color(0xFF2D1B16),
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-            letterSpacing: 0.2,
+          backgroundColor: Colors.transparent,
+          foregroundColor: Color(0xFF2E1C15),
+          titleTextStyle: TextStyle(
+            color: Color(0xFF2E1C15),
+            fontWeight: FontWeight.w800,
+            fontSize: 18,
           ),
           surfaceTintColor: Colors.transparent,
         ),
         cardTheme: CardThemeData(
           color: Colors.white,
-          elevation: 1,
-          shadowColor: const Color(0x1A5A3A2C),
+          elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(20),
           ),
-        ),
-        navigationBarTheme: NavigationBarThemeData(
-          backgroundColor: Colors.white,
-          indicatorColor: const Color(0xFFFFDFC8),
-          iconTheme: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) {
-              return const IconThemeData(color: Color(0xFFB83D1E));
-            }
-            return const IconThemeData(color: Color(0xFF8A6A5A));
-          }),
-          labelTextStyle: WidgetStateProperty.resolveWith((states) {
-            return TextStyle(
-              color: states.contains(WidgetState.selected)
-                  ? const Color(0xFFB83D1E)
-                  : const Color(0xFF8A6A5A),
-              fontWeight: states.contains(WidgetState.selected)
-                  ? FontWeight.w700
-                  : FontWeight.w600,
-            );
-          }),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: const Color(0xFFFFFBF7),
+          fillColor: Colors.white,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18),
-            borderSide: BorderSide(color: Colors.brown.shade100),
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: Colors.grey.shade300),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18),
-            borderSide: BorderSide(color: Colors.brown.shade100),
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: Colors.grey.shade300),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18),
-            borderSide: const BorderSide(color: Color(0xFFD84A24), width: 1.6),
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Color(0xFFE53935), width: 1.5),
           ),
-          labelStyle: TextStyle(color: Colors.brown.shade500),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 18,
           ),
         ),
-        snackBarTheme: SnackBarThemeData(
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             minimumSize: const Size.fromHeight(52),
-            elevation: 0,
-            foregroundColor: Colors.white,
-            backgroundColor: const Color(0xFFD84A24),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(16),
             ),
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 15,
-            ),
+            textStyle: const TextStyle(fontWeight: FontWeight.w700),
           ),
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFFB83D1E),
+            foregroundColor: const Color(0xFFD84A24),
             textStyle: const TextStyle(fontWeight: FontWeight.w600),
           ),
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          backgroundColor: Colors.white,
+          indicatorColor: const Color(0xFFFFE1D0),
+          labelTextStyle: WidgetStateProperty.resolveWith((states) {
+            final selected = states.contains(WidgetState.selected);
+            return TextStyle(
+              color: selected ? const Color(0xFFB63B1D) : const Color(0xFF8C6B5A),
+              fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+            );
+          }),
         ),
       ),
       // Gunakan StreamBuilder sebagai pemeriksa status login (Listener)

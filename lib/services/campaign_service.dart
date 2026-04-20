@@ -53,6 +53,23 @@ class CampaignService {
         );
   }
 
+  Stream<List<DonationRecord>> watchUserDonations(
+    String userId, {
+    int limit = 80,
+  }) {
+    return _firestore
+        .collection('donations')
+        .where('userId', isEqualTo: userId)
+        .orderBy('createdAt', descending: true)
+        .limit(limit)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => DonationRecord.fromDoc(doc))
+              .toList(growable: false),
+        );
+  }
+
   Future<void> donate(
     String campaignId, {
     int amount = kQuickDonateAmount,

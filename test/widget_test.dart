@@ -19,7 +19,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(MaterialApp), findsOneWidget);
-    expect(find.text('Ruang Donasi'), findsOneWidget);
-    expect(find.text('Belum punya akun donatur? Daftar'), findsOneWidget);
+    expect(find.text('Donasi App'), findsOneWidget);
+    expect(find.text('Belum punya akun? Daftar di sini'), findsOneWidget);
   });
 }

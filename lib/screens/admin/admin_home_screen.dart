@@ -25,6 +25,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     'Riwayat Donasi',
   ];
 
+  static const List<String> _subtitles = [
+    'Ringkasan performa platform donasi',
+    'Kelola campaign aktif dan konten visual',
+    'Pantau role dan aktivitas akun pengguna',
+    'Audit transaksi donasi terbaru',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final pages = [
@@ -36,7 +43,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titles[_currentIndex]),
+        toolbarHeight: 76,
+        titleSpacing: 16,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -45,6 +53,48 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               colors: [Color(0xFFFFF5EC), Color(0xFFFEE8D8)],
             ),
           ),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFD84A24).withOpacity(0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.admin_panel_settings_outlined,
+                color: Color(0xFFB43D1E),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _titles[_currentIndex],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF2E1C15),
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    _subtitles[_currentIndex],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.brown.shade600,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
         actions: [
           Padding(
@@ -63,6 +113,28 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             icon: const Icon(Icons.logout),
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFEAD8),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: const Text(
+                'Admin mode aktif. Semua perubahan tersimpan real-time.',
+                style: TextStyle(
+                  color: Color(0xFF7A3A20),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
