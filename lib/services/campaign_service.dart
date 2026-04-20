@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
 
 import '../config/donation_config.dart';
 import '../models/campaign_model.dart';
@@ -9,12 +11,15 @@ import '../models/donation_record_model.dart';
 import '../models/user_profile_model.dart';
 
 class CampaignService {
-  CampaignService({FirebaseFirestore? firestore, FirebaseStorage? storage})
-    : _firestore = firestore ?? FirebaseFirestore.instance,
-      _storage = storage ?? FirebaseStorage.instance;
+  CampaignService({FirebaseFirestore? firestore})
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
-  final FirebaseStorage _storage;
+
+  String get _cloudinaryCloudName =>
+      (dotenv.env['CLOUDINARY_CLOUD_NAME'] ?? '').trim();
+  String get _cloudinaryUploadPreset =>
+      (dotenv.env['CLOUDINARY_UPLOAD_PRESET'] ?? '').trim();
 
   Stream<List<Campaign>> watchCampaigns() {
     return _firestore
@@ -26,6 +31,14 @@ class CampaignService {
               .map((doc) => Campaign.fromDoc(doc))
               .toList(growable: false),
         );
+  }
+
+  Stream<Campaign?> watchCampaign(String campaignId) {
+    return _firestore
+        .collection('campaigns')
+        .doc(campaignId)
+        .snapshots()
+        .map((doc) => doc.exists ? Campaign.fromDoc(doc) : null);
   }
 
   Stream<List<UserProfile>> watchUsers() {
@@ -60,19 +73,26 @@ class CampaignService {
     return _firestore
         .collection('donations')
         .where('userId', isEqualTo: userId)
-        .orderBy('createdAt', descending: true)
         .limit(limit)
         .snapshots()
-        .map(
-          (snapshot) => snapshot.docs
-              .map((doc) => DonationRecord.fromDoc(doc))
-              .toList(growable: false),
-        );
+        .map((snapshot) {
+          final items = snapshot.docs.map(DonationRecord.fromDoc).toList();
+          items.sort((left, right) {
+            final leftTime =
+                left.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+            final rightTime =
+                right.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+            return rightTime.compareTo(leftTime);
+          });
+          return items;
+        });
   }
 
   Future<void> donate(
     String campaignId, {
     int amount = kQuickDonateAmount,
+    required String displayName,
+    required bool isAnonymous,
   }) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -101,6 +121,8 @@ class CampaignService {
         'campaignTitle': campaignTitle,
         'userId': user.uid,
         'userEmail': user.email?.trim().toLowerCase() ?? '-',
+        'displayName': displayName.trim(),
+        'isAnonymous': isAnonymous,
         'amount': amount,
         'createdAt': FieldValue.serverTimestamp(),
       });
@@ -155,29 +177,45 @@ class CampaignService {
     XFile pickedImage, {
     void Function(double progress)? onProgress,
   }) async {
+    if (_cloudinaryCloudName.isEmpty || _cloudinaryUploadPreset.isEmpty) {
+      throw Exception(
+        'Konfigurasi Cloudinary belum diisi di file .env. Isi CLOUDINARY_CLOUD_NAME dan CLOUDINARY_UPLOAD_PRESET terlebih dahulu.',
+      );
+    }
+
     final bytes = await pickedImage.readAsBytes();
-    final fileName =
-        '${DateTime.now().millisecondsSinceEpoch}_${pickedImage.name}';
-    final ref = _storage.ref().child('campaign_images').child(fileName);
+    final endpoint = Uri.parse(
+      'https://api.cloudinary.com/v1_1/$_cloudinaryCloudName/image/upload',
+    );
 
-    final task = ref.putData(bytes);
-    final subscription = task.snapshotEvents.listen((snapshot) {
-      final total = snapshot.totalBytes;
-      if (onProgress != null && total > 0) {
-        onProgress(snapshot.bytesTransferred / total);
-      }
-    });
+    onProgress?.call(0.1);
 
-    await task;
-    await subscription.cancel();
-    return ref.getDownloadURL();
+    final request = http.MultipartRequest('POST', endpoint)
+      ..fields['upload_preset'] = _cloudinaryUploadPreset
+      ..fields['folder'] = 'campaign_images'
+      ..files.add(
+        http.MultipartFile.fromBytes('file', bytes, filename: pickedImage.name),
+      );
+
+    final streamed = await request.send();
+    final responseBody = await streamed.stream.bytesToString();
+
+    if (streamed.statusCode < 200 || streamed.statusCode >= 300) {
+      throw Exception('Upload gagal (${streamed.statusCode}): $responseBody');
+    }
+
+    final decoded = jsonDecode(responseBody) as Map<String, dynamic>;
+    final secureUrl = decoded['secure_url'] as String?;
+    if (secureUrl == null || secureUrl.isEmpty) {
+      throw Exception('Cloudinary tidak mengembalikan secure_url.');
+    }
+
+    onProgress?.call(1.0);
+    return secureUrl;
   }
 
   Future<void> deleteImageByUrl(String imageUrl) async {
-    try {
-      await _storage.refFromURL(imageUrl).delete();
-    } on FirebaseException {
-      // Ignore when image already deleted or URL is no longer valid.
-    }
+    // Unsigned Cloudinary upload cannot securely delete assets from client side.
+    // Keep this as no-op unless deletion is implemented via backend.
   }
 }

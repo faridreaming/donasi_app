@@ -518,7 +518,7 @@ class _AdminDonationHistoryTab extends StatelessWidget {
                 ),
                 title: Text(item.campaignTitle),
                 subtitle: Text(
-                  '${item.userEmail}\n${_formatDate(item.createdAt)}',
+                  '${item.isAnonymous ? 'Hamba Allah' : item.displayName}\n${item.userEmail}\n${_formatDate(item.createdAt)}',
                 ),
                 isThreeLine: true,
                 trailing: Text(

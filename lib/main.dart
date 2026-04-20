@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'config/admin_config.dart';
@@ -9,6 +10,12 @@ import 'screens/dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await dotenv.load(fileName: '.env');
+  } catch (_) {
+    // Keep app running; upload service will show clear message if env is missing.
+  }
 
   // Sekarang Firebase tahu konfigurasi untuk SEMUA platform
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -94,7 +101,9 @@ class DonasiApp extends StatelessWidget {
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             final selected = states.contains(WidgetState.selected);
             return TextStyle(
-              color: selected ? const Color(0xFFB63B1D) : const Color(0xFF8C6B5A),
+              color: selected
+                  ? const Color(0xFFB63B1D)
+                  : const Color(0xFF8C6B5A),
               fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
             );
           }),

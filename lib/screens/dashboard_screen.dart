@@ -6,6 +6,7 @@ import '../models/campaign_model.dart';
 import '../models/donation_record_model.dart';
 import '../services/auth_service.dart';
 import '../services/campaign_service.dart';
+import 'campaign_detail_screen.dart';
 import '../utils/currency_formatter.dart';
 import '../widgets/campaign_card.dart';
 
@@ -302,32 +303,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                     return CampaignCard(
                       campaign: campaign,
-                      onDonate: () async {
-                        try {
-                          await _campaignService.donate(campaign.id);
-                          if (!context.mounted) {
-                            return;
-                          }
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Terima kasih. Donasi berhasil dikirim.',
-                              ),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                        } catch (e) {
-                          if (!context.mounted) {
-                            return;
-                          }
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Donasi belum berhasil. Silakan coba lagi. ($e)',
-                              ),
-                            ),
-                          );
-                        }
+                      onOpenDetail: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CampaignDetailScreen(campaign: campaign),
+                          ),
+                        );
                       },
                     );
                   },
@@ -373,10 +356,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       color: const Color(0xFFFFF0E6),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(
-                      Icons.history,
-                      color: Color(0xFFB83D1E),
-                    ),
+                    child: const Icon(Icons.history, color: Color(0xFFB83D1E)),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -474,7 +454,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           item.campaignTitle,
                           style: const TextStyle(fontWeight: FontWeight.w700),
                         ),
-                        subtitle: Text(_formatDate(item.createdAt)),
+                        subtitle: Text(
+                          '${item.isAnonymous ? 'Hamba Allah' : item.displayName}\n${_formatDate(item.createdAt)}',
+                        ),
+                        isThreeLine: true,
                         trailing: Text(
                           'Rp ${formatRupiah(item.amount)}',
                           style: const TextStyle(
@@ -497,10 +480,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final pages = [
-      _buildCampaignTab(user),
-      _buildHistoryTab(user),
-    ];
+    final pages = [_buildCampaignTab(user), _buildHistoryTab(user)];
 
     return Scaffold(
       appBar: _buildTopBar(user),

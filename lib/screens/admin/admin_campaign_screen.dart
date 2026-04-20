@@ -34,6 +34,14 @@ class _AdminCampaignScreenState extends State<AdminCampaignScreen> {
     await _runProcessing(() async {
       String? imageUrl;
       if (formResult.pickedImage != null) {
+        final shouldUpload = await _confirmImageUpload(
+          title: formResult.title,
+          fileName: formResult.pickedImage!.name,
+        );
+        if (!shouldUpload) {
+          throw const _CampaignActionCancelled();
+        }
+
         imageUrl = await _campaignService.uploadCampaignImage(
           formResult.pickedImage!,
           onProgress: (value) {
@@ -75,9 +83,18 @@ class _AdminCampaignScreenState extends State<AdminCampaignScreen> {
       }
 
       if (formResult.pickedImage != null) {
+        final shouldUpload = await _confirmImageUpload(
+          title: formResult.title,
+          fileName: formResult.pickedImage!.name,
+        );
+        if (!shouldUpload) {
+          throw const _CampaignActionCancelled();
+        }
+
         if (imageUrl != null) {
           await _campaignService.deleteImageByUrl(imageUrl);
         }
+
         imageUrl = await _campaignService.uploadCampaignImage(
           formResult.pickedImage!,
           onProgress: (value) {
@@ -99,6 +116,35 @@ class _AdminCampaignScreenState extends State<AdminCampaignScreen> {
         imageUrl: imageUrl,
       );
     }, successMessage: 'Campaign berhasil diperbarui.');
+  }
+
+  Future<bool> _confirmImageUpload({
+    required String title,
+    required String fileName,
+  }) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi upload gambar'),
+          content: Text(
+            'Unggah file "$fileName" untuk campaign "$title" sekarang?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Batal'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Ya, upload'),
+            ),
+          ],
+        );
+      },
+    );
+
+    return confirmed ?? false;
   }
 
   Future<void> _handleDeleteCampaign(Campaign campaign) async {
@@ -157,6 +203,10 @@ class _AdminCampaignScreenState extends State<AdminCampaignScreen> {
         );
       }
     } catch (error) {
+      if (error is _CampaignActionCancelled) {
+        return;
+      }
+
       if (mounted) {
         ScaffoldMessenger.of(
           context,
@@ -744,4 +794,8 @@ class _CampaignFormResult {
   final int collected;
   final XFile? pickedImage;
   final bool removeExistingImage;
+}
+
+class _CampaignActionCancelled implements Exception {
+  const _CampaignActionCancelled();
 }
