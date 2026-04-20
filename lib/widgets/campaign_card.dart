@@ -100,7 +100,9 @@ class CampaignCard extends StatelessWidget {
                   await onDonate();
                 },
                 icon: const Icon(Icons.volunteer_activism, size: 20),
-                label: Text('Donasi ${formatRupiahCompact(kQuickDonateAmount)}'),
+                label: Text(
+                  'Donasi ${formatRupiahCompact(kQuickDonateAmount)}',
+                ),
               ),
             ),
           ],
