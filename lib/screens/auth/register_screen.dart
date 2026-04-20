@@ -201,6 +201,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       child: const Text('Daftar Sekarang'),
                                     ),
                             ),
+                            const SizedBox(height: 16),
+                            TextButton.icon(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(Icons.arrow_back),
+                              label: const Text('Kembali ke Login'),
+                            ),
                           ],
                         ),
                       ),
