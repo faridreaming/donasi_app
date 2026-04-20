@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // Import file yang baru di-generate
+import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'screens/auth/login_screen.dart';
+import 'screens/dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +25,23 @@ class DonasiApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const Scaffold(
-        body: Center(child: Text('Firebase Berhasil Jalan! 🚀')),
+      // Gunakan StreamBuilder sebagai pemeriksa status login (Listener)
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          // Jika masih loading mengecek status...
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          // Jika ada data user (berarti sudah login)
+          if (snapshot.hasData) {
+            return const DashboardScreen();
+          }
+
+          // Jika tidak ada user (berarti belum login / sudah logout)
+          return const LoginScreen();
+        },
       ),
     );
   }
