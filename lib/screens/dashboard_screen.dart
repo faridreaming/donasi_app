@@ -40,50 +40,84 @@ class DashboardScreen extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFFFFBFA), Color(0xFFF7F3EE)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFFFF4EA), Color(0xFFFCE8D7), Color(0xFFF8EFE6)],
           ),
         ),
         child: Column(
           children: [
             Container(
               width: double.infinity,
-              margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              padding: const EdgeInsets.all(18),
+              margin: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFFE53935), Color(0xFFFF7043)],
+                  colors: [Color(0xFFC64022), Color(0xFFF08A55)],
                 ),
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(28),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.red.withOpacity(0.16),
-                    blurRadius: 24,
-                    offset: const Offset(0, 12),
+                    color: const Color(0xFFB43A1E).withOpacity(0.28),
+                    blurRadius: 30,
+                    offset: const Offset(0, 14),
                   ),
                 ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.favorite, color: Colors.white, size: 28),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Icon(
+                          Icons.favorite,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Halo, ${_greetingName(user)}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 10),
                   Text(
-                    'Halo, ${_greetingName(user)}',
+                    'Setiap kontribusi kecil dapat menghadirkan perubahan besar.',
                     style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
+                      color: Color(0xFFFFF0E6),
+                      fontSize: 14,
+                      height: 1.45,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'Setiap kontribusi kecil dapat menghadirkan perubahan besar.',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      height: 1.4,
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.18),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: const Text(
+                      'Dukung campaign terpercaya hari ini',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ],
@@ -95,17 +129,41 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _StatCard(
-                      icon: Icons.verified,
+                      icon: Icons.verified_user,
                       label: 'Akun terlindungi',
-                      value: 'Keamanan data aktif',
+                      value: 'Keamanan aktif',
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: _StatCard(
-                      icon: Icons.auto_graph,
+                      icon: Icons.bolt,
                       label: 'Donasi cepat',
                       value: 'Rp $quickDonateAmount',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Row(
+                children: [
+                  Text(
+                    'Campaign Untuk Kamu',
+                    style: TextStyle(
+                      color: Colors.brown.shade800,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 17,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    'Update Real-time',
+                    style: TextStyle(
+                      color: Colors.brown.shade500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -127,7 +185,14 @@ class DashboardScreen extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.cloud_off, size: 48),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: const Icon(Icons.cloud_off, size: 48),
+                            ),
                             const SizedBox(height: 12),
                             Text(
                               'Kampanye belum bisa dimuat saat ini. Silakan coba beberapa saat lagi.',
@@ -244,12 +309,13 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        color: Colors.white.withOpacity(0.94),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFFFDEC9)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 16,
+            color: const Color(0xFF4A2F24).withOpacity(0.07),
+            blurRadius: 18,
             offset: const Offset(0, 8),
           ),
         ],
@@ -257,16 +323,27 @@ class _StatCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.red.shade400),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFEFE5),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: const Color(0xFFD84A24)),
+          ),
           const SizedBox(height: 10),
           Text(
             label,
-            style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+            style: TextStyle(color: Colors.brown.shade600, fontSize: 12),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+            style: const TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 14,
+              color: Color(0xFF35221A),
+            ),
           ),
         ],
       ),

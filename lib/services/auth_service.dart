@@ -1,13 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../config/admin_config.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Fungsi Register
   Future<User?> registerWithEmail(String email, String password) async {
     try {
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
+      await _upsertUserProfile(userCredential.user);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       throw Exception(_messageFromAuthException(e));
@@ -23,6 +28,7 @@ class AuthService {
         email: email,
         password: password,
       );
+      await _upsertUserProfile(userCredential.user);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       throw Exception(_messageFromAuthException(e));
@@ -34,6 +40,23 @@ class AuthService {
   // Fungsi Logout
   Future<void> logout() async {
     await _auth.signOut();
+  }
+
+  Future<void> _upsertUserProfile(User? user) async {
+    if (user == null) {
+      return;
+    }
+
+    final normalizedEmail = user.email?.trim().toLowerCase() ?? '';
+    final role = isAdminEmail(normalizedEmail) ? 'admin' : 'user';
+
+    await _firestore.collection('users').doc(user.uid).set({
+      'uid': user.uid,
+      'email': normalizedEmail,
+      'role': role,
+      'createdAt': FieldValue.serverTimestamp(),
+      'lastLoginAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 
   String _messageFromAuthException(FirebaseAuthException error) {
