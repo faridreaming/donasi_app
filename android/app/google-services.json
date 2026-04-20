@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "700292526751",
+    "project_id": "donasi-app-e23ee",
+    "storage_bucket": "donasi-app-e23ee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700292526751:android:210bdb268050814d1ba8aa",
+        "android_client_info": {
+          "package_name": "com.example.donasi_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7mE6LRox0Srt-x8T17W33XlYfm2S1mKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
