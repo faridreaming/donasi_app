@@ -100,8 +100,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.volunteer_activism,
-                              color: Colors.white, size: 42),
+                          Icon(
+                            Icons.volunteer_activism,
+                            color: Colors.white,
+                            size: 42,
+                          ),
                           SizedBox(height: 18),
                           Text(
                             'Donasi App',
@@ -144,9 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Text(
                               'Login',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
+                              style: Theme.of(context).textTheme.headlineSmall
                                   ?.copyWith(fontWeight: FontWeight.w800),
                             ),
                             const SizedBox(height: 8),
@@ -209,11 +210,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const RegisterScreen(),
+                                    builder: (context) =>
+                                        const RegisterScreen(),
                                   ),
                                 );
                               },
-                              child: const Text('Belum punya akun? Daftar di sini'),
+                              child: const Text(
+                                'Belum punya akun? Daftar di sini',
+                              ),
                             ),
                           ],
                         ),

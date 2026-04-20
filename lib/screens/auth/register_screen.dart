@@ -97,8 +97,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.volunteer_activism,
-                              color: Colors.white, size: 42),
+                          Icon(
+                            Icons.volunteer_activism,
+                            color: Colors.white,
+                            size: 42,
+                          ),
                           SizedBox(height: 18),
                           Text(
                             'Buat Akun Baru',
@@ -141,9 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           children: [
                             Text(
                               'Registrasi',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
+                              style: Theme.of(context).textTheme.headlineSmall
                                   ?.copyWith(fontWeight: FontWeight.w800),
                             ),
                             const SizedBox(height: 8),

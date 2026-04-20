@@ -56,9 +56,8 @@ class CampaignCard extends StatelessWidget {
                     children: [
                       Text(
                         campaign.title,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w800,
-                            ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -102,9 +101,9 @@ class CampaignCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'Terkumpul Rp ${_formatCurrency(campaign.collected)} dari target Rp ${_formatCurrency(campaign.target)}',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey.shade700,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade700),
             ),
             const SizedBox(height: 12),
             Align(
