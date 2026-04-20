@@ -104,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 18),
                           Text(
-                            'Buat Akun Baru',
+                            'Jadi Bagian Kebaikan',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 28,
@@ -113,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'Daftar untuk mulai berdonasi dan melihat kampanye aktif.',
+                            'Buat akun untuk mendukung kampanye yang benar-benar membutuhkan.',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -143,20 +143,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              'Registrasi',
+                              'Daftar Akun Donatur',
                               style: Theme.of(context).textTheme.headlineSmall
                                   ?.copyWith(fontWeight: FontWeight.w800),
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Lengkapi data sederhana untuk membuat akun.',
+                              'Gunakan email aktif untuk menerima update kontribusi.',
                               style: TextStyle(color: Colors.grey.shade700),
                             ),
                             const SizedBox(height: 24),
                             TextFormField(
                               controller: _emailController,
                               decoration: const InputDecoration(
-                                labelText: 'Email Baru',
+                                labelText: 'Email aktif',
                                 prefixIcon: Icon(Icons.email_outlined),
                               ),
                               keyboardType: TextInputType.emailAddress,
@@ -174,7 +174,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             TextFormField(
                               controller: _passwordController,
                               decoration: const InputDecoration(
-                                labelText: 'Password (Min. 6 Karakter)',
+                                labelText: 'Password (minimal 6 karakter)',
                                 prefixIcon: Icon(Icons.lock_outline),
                               ),
                               obscureText: true,
@@ -198,7 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     )
                                   : ElevatedButton(
                                       onPressed: _register,
-                                      child: const Text('Daftar Sekarang'),
+                                      child: const Text('Buat Akun Donatur'),
                                     ),
                             ),
                             const SizedBox(height: 16),
@@ -207,7 +207,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 Navigator.pop(context);
                               },
                               icon: const Icon(Icons.arrow_back),
-                              label: const Text('Kembali ke Login'),
+                              label: const Text('Sudah punya akun? Masuk'),
                             ),
                           ],
                         ),

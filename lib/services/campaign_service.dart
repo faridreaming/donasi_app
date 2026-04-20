@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../config/donation_config.dart';
 import '../models/campaign_model.dart';
 
 class CampaignService {
@@ -20,7 +21,7 @@ class CampaignService {
         );
   }
 
-  Future<void> donate(String campaignId, {int amount = 50000}) {
+  Future<void> donate(String campaignId, {int amount = kQuickDonateAmount}) {
     return _firestore.collection('campaigns').doc(campaignId).update({
       'collected': FieldValue.increment(amount),
     });

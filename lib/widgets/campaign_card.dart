@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../config/donation_config.dart';
 import '../models/campaign_model.dart';
+import '../utils/currency_formatter.dart';
 
 class CampaignCard extends StatelessWidget {
   const CampaignCard({
@@ -11,21 +13,6 @@ class CampaignCard extends StatelessWidget {
 
   final Campaign campaign;
   final Future<void> Function() onDonate;
-
-  String _formatCurrency(int value) {
-    final digits = value.toString();
-    final reversed = digits.split('').reversed.toList();
-    final buffer = StringBuffer();
-
-    for (var i = 0; i < reversed.length; i++) {
-      buffer.write(reversed[i]);
-      if (i != reversed.length - 1 && (i + 1) % 3 == 0) {
-        buffer.write('.');
-      }
-    }
-
-    return buffer.toString().split('').reversed.join();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +63,7 @@ class CampaignCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Progress Donasi',
+                  'Progress pendanaan',
                   style: TextStyle(
                     color: Colors.grey.shade700,
                     fontWeight: FontWeight.w600,
@@ -100,7 +87,7 @@ class CampaignCard extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'Terkumpul Rp ${_formatCurrency(campaign.collected)} dari target Rp ${_formatCurrency(campaign.target)}',
+              'Terkumpul Rp ${formatRupiah(campaign.collected)} dari kebutuhan Rp ${formatRupiah(campaign.target)}',
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade700),
@@ -113,7 +100,7 @@ class CampaignCard extends StatelessWidget {
                   await onDonate();
                 },
                 icon: const Icon(Icons.volunteer_activism, size: 20),
-                label: const Text('Donasi 50k'),
+                label: Text('Donasi ${formatRupiahCompact(kQuickDonateAmount)}'),
               ),
             ),
           ],

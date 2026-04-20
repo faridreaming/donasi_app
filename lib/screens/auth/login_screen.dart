@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           SizedBox(height: 18),
                           Text(
-                            'Donasi App',
+                            'Ruang Donasi',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 28,
@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'Masuk untuk melihat kampanye dan ikut berdonasi.',
+                            'Masuk untuk menyalurkan bantuan dengan aman dan transparan.',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -146,13 +146,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              'Login',
+                              'Masuk ke Akun Donatur',
                               style: Theme.of(context).textTheme.headlineSmall
                                   ?.copyWith(fontWeight: FontWeight.w800),
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Gunakan akun yang sudah terdaftar.',
+                              'Pantau kampanye dan lanjutkan kontribusimu.',
                               style: TextStyle(color: Colors.grey.shade700),
                             ),
                             const SizedBox(height: 24),
@@ -201,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     )
                                   : ElevatedButton(
                                       onPressed: _login,
-                                      child: const Text('Masuk'),
+                                      child: const Text('Masuk dan Berdonasi'),
                                     ),
                             ),
                             const SizedBox(height: 16),
@@ -216,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                               },
                               child: const Text(
-                                'Belum punya akun? Daftar di sini',
+                                'Belum punya akun donatur? Daftar',
                               ),
                             ),
                           ],

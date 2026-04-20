@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../config/donation_config.dart';
 import '../models/campaign_model.dart';
 import '../services/auth_service.dart';
 import '../services/campaign_service.dart';
+import '../utils/currency_formatter.dart';
 import '../widgets/campaign_card.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -21,10 +23,11 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     final campaignService = CampaignService();
+    final quickDonateAmount = formatRupiah(kQuickDonateAmount);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard Donasi'),
+        title: const Text('Ruang Donasi'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -76,7 +79,7 @@ class DashboardScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   const Text(
-                    'Sedikit bantuan darimu bisa berarti besar untuk mereka.',
+                    'Setiap kontribusi kecil dapat menghadirkan perubahan besar.',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -93,16 +96,16 @@ class DashboardScreen extends StatelessWidget {
                   Expanded(
                     child: _StatCard(
                       icon: Icons.verified,
-                      label: 'Mode belajar',
-                      value: 'Flutter + Firebase',
+                      label: 'Akun terlindungi',
+                      value: 'Keamanan data aktif',
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: _StatCard(
                       icon: Icons.auto_graph,
-                      label: 'Aksi cepat',
-                      value: 'Donasi 50k',
+                      label: 'Donasi cepat',
+                      value: 'Rp $quickDonateAmount',
                     ),
                   ),
                 ],
@@ -127,7 +130,7 @@ class DashboardScreen extends StatelessWidget {
                             const Icon(Icons.cloud_off, size: 48),
                             const SizedBox(height: 12),
                             Text(
-                              'Gagal memuat kampanye. Pastikan collection campaigns sudah ada di Firestore.',
+                              'Kampanye belum bisa dimuat saat ini. Silakan coba beberapa saat lagi.',
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.grey.shade700),
                             ),
@@ -160,7 +163,7 @@ class DashboardScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 16),
                             const Text(
-                              'Belum ada kampanye donasi.',
+                              'Belum ada kampanye aktif.',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 18,
@@ -169,7 +172,7 @@ class DashboardScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Tambahkan data campaign ke Firestore collection campaigns supaya daftar ini tampil.',
+                              'Tim kami sedang menyiapkan kampanye baru. Yuk cek lagi sebentar lagi.',
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.grey.shade700),
                             ),
@@ -194,7 +197,7 @@ class DashboardScreen extends StatelessWidget {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
-                                    'Terima kasih! Donasi Rp 50.000 berhasil.',
+                                    'Terima kasih. Kontribusimu berhasil dikirim.',
                                   ),
                                   backgroundColor: Colors.green,
                                 ),
@@ -203,7 +206,11 @@ class DashboardScreen extends StatelessWidget {
                           } catch (e) {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Gagal donasi: $e')),
+                                SnackBar(
+                                  content: Text(
+                                    'Donasi belum berhasil. Silakan coba lagi. ($e)',
+                                  ),
+                                ),
                               );
                             }
                           }
